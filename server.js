@@ -15,17 +15,9 @@ const pool = new Pool({
 // 1. API Lấy danh sách sinh viên
 app.get('/api/sinhvien', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM "QuanLySinhVien" ORDER BY "Mã Sinh Viên" ASC');
-        
-        // Map lại tên thuộc tính để khớp với frontend script.js
-        const mappedRows = result.rows.map(row => ({
-            HoTen: row["Họ Và Tên"],
-            MaSV: row["Mã Sinh Viên"],
-            Lop: row["Lớp"],
-            Nganh: row["Ngành"]
-        }));
-
-        res.json(mappedRows);
+        // Truy vấn chính xác các cột HoTen, MaSV, Lop, Nganh từ bảng QuanLySinhVien
+        const result = await pool.query('SELECT "id", "HoTen", "MaSV", "Lop", "Nganh" FROM "QuanLySinhVien" ORDER BY "id" ASC');
+        res.json(result.rows);
     } catch (err) {
         console.error("Loi GET:", err.message);
         res.status(500).json({ message: "Lỗi kết nối cơ sở dữ liệu: " + err.message });
@@ -42,7 +34,7 @@ app.post('/api/sinhvien', async (req, res) => {
 
     try {
         const queryText = `
-            INSERT INTO "QuanLySinhVien" ("Họ Và Tên", "Mã Sinh Viên", "Lớp", "Ngành") 
+            INSERT INTO "QuanLySinhVien" ("HoTen", "MaSV", "Lop", "Nganh") 
             VALUES ($1, $2, $3, $4)
         `;
         await pool.query(queryText, [HoTen.trim(), MaSV.trim(), Lop.trim(), Nganh.trim()]);
@@ -50,7 +42,7 @@ app.post('/api/sinhvien', async (req, res) => {
     } catch (err) {
         console.error("Loi INSERT:", err);
         if (err.code === '23505') {
-            return res.status(400).json({ message: `Mã sinh viên [${MaSV}] đã tồn tại trong hệ thống!` });
+            return res.status(400).json({ message: `Mã sinh viên [${MaSV}] đã tồn tại!` });
         }
         res.status(500).json({ message: "Lỗi Database: " + (err.detail || err.message) });
     }
@@ -60,7 +52,7 @@ app.post('/api/sinhvien', async (req, res) => {
 app.delete('/api/sinhvien/:masv', async (req, res) => {
     const { masv } = req.params;
     try {
-        await pool.query('DELETE FROM "QuanLySinhVien" WHERE "Mã Sinh Viên" = $1', [masv]);
+        await pool.query('DELETE FROM "QuanLySinhVien" WHERE "MaSV" = $1', [masv]);
         res.json({ message: "Xóa sinh viên thành công!" });
     } catch (err) {
         console.error("Loi DELETE:", err.message);
