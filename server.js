@@ -1,35 +1,54 @@
 const express = require('express');
-const { Pool } = require('pg');
 const cors = require('cors');
+const { Pool } = require('pg');
 
 const app = express();
-app.use(express.json());
 app.use(cors());
+app.use(express.json());
 
-// Lấy chuỗi kết nối từ Render Environment Variable hoặc dùng trực tiếp chuỗi Supabase
-const connectionString = process.env.DATABASE_URL || 'postgres://postgres.xxx:MAT_KHAU_THAT@aws-0-ap-southeast-1.pooler.supabase.com:6543/postgres';
-
+// Kết nối PostgreSQL Supabase qua biến DATABASE_URL
 const pool = new Pool({
-    connectionString: connectionString,
-    ssl: { rejectUnauthorized: false } // Bắt buộc khi kết nối Supabase Cloud
+    connectionString: process.env.DATABASE_URL,
+    ssl: { rejectUnauthorized: false }
 });
 
-// API nhận dữ liệu từ Web và lưu vào Supabase
-app.post('/api/them-sinh-vien', async (req, res) => {
-    const { hoTen, maSV, lop, nganh } = req.body;
-
+// 1. API Lấy danh sách sinh viên
+app.get('/api/sinhvien', async (req, res) => {
     try {
-        const queryText = 'INSERT INTO SinhVien (HoTen, MaSV, Lop, Nganh) VALUES ($1, $2, $3, $4)';
-        await pool.query(queryText, [hoTen, maSV, lop, nganh]);
-
-        res.json({ success: true, message: 'Lưu thông tin sinh viên thành công!' });
+        const result = await pool.query('SELECT * FROM "SinhVien" ORDER BY "MaSV" ASC');
+        res.json(result.rows);
     } catch (err) {
-        console.error('Lỗi Database:', err);
-        res.status(500).json({ success: false, message: 'Lưu dữ liệu thất bại', error: err.message });
+        console.error(err);
+        res.status(500).json({ message: "Lỗi kết nối cơ sở dữ liệu" });
     }
 });
 
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-    console.log(`Server đang chạy tại cổng ${PORT}`);
+// 2. API Thêm sinh viên mới
+app.post('/api/sinhvien', async (req, res) => {
+    const { HoTen, MaSV, Lop, Nganh } = req.body;
+    try {
+        await pool.query(
+            'INSERT INTO "SinhVien" ("HoTen", "MaSV", "Lop", "Nganh") VALUES ($1, $2, $3, $4)',
+            [HoTen, MaSV, Lop, Nganh]
+        );
+        res.json({ message: "Thêm sinh viên thành công!" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Không thể chèn dữ liệu. Mã sinh viên có thể đã tồn tại!" });
+    }
 });
+
+// 3. API Xóa sinh viên theo Mã SV
+app.delete('/api/sinhvien/:masv', async (req, res) => {
+    const { masv } = req.params;
+    try {
+        await pool.query('DELETE FROM "SinhVien" WHERE "MaSV" = $1', [masv]);
+        res.json({ message: "Xóa sinh viên thành công!" });
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ message: "Lỗi khi xóa sinh viên" });
+    }
+});
+
+const PORT = process.env.PORT || 10000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
