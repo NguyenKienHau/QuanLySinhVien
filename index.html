@@ -1,20 +1,28 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hệ Thống Quản Lý Sinh Viên Cloud</title>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
+        rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-    <!-- Ảnh nền tĩnh phủ lớp mờ -->
-    <div class="static-bg-overlay"></div>
+    <!-- Nền Động (Animated Canvas Grid & Glowing Orbs) -->
+    <div class="animated-bg">
+        <div class="orb orb-green"></div>
+        <div class="orb orb-orange"></div>
+        <div class="orb orb-dark"></div>
+        <div class="grid-overlay"></div>
+    </div>
 
     <div class="app-container">
         <!-- Header / Navbar -->
@@ -115,7 +123,8 @@
                 <!-- Search Bar -->
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchInput" onkeyup="filterStudents()" placeholder="Tìm kiếm theo tên, Mã SV, Lớp...">
+                    <input type="text" id="searchInput" onkeyup="filterStudents()"
+                        placeholder="Tìm kiếm theo tên, Mã SV, Lớp...">
                 </div>
 
                 <!-- Student Table -->
@@ -140,7 +149,8 @@
             </section>
         </main>
     </div>
-    
+
     <script src="script.js"></script>
 </body>
+
 </html>
