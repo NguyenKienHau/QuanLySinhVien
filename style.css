@@ -1,15 +1,15 @@
 :root {
-    --primary: #10b981;          /* Xanh lá Ngọc Emerald */
-    --primary-hover: #059669;    /* Xanh lá đậm khi hover */
-    --primary-light: #d1fae5;    /* Xanh nhạt mint */
-    --accent-teal: #14b8a6;      /* Xanh ngọc lam */
+    --primary-green: #10b981;     /* Xanh lá ngọc */
+    --primary-green-hover: #059669;
+    --accent-orange: #f97316;     /* Cam tươi */
+    --accent-orange-hover: #ea580c;
     
-    --bg-main: #f0fdf4;          /* Nền trắng xanh mint siêu nhẹ */
-    --glass-card: rgba(255, 255, 255, 0.85);
-    --glass-border: rgba(16, 185, 129, 0.18);
+    --text-dark: #0f172a;         /* Chữ xanh đen đậm tương phản tốt */
+    --text-muted: #475569;        /* Chữ phụ */
     
-    --text-main: #064e3b;        /* Chữ màu xanh đậm tương phản cao */
-    --text-muted: #047857;       /* Chữ phụ xanh lá vừa */
+    /* Hiệu ứng Trắng mờ (Frosted Glass) */
+    --glass-card: rgba(255, 255, 255, 0.75);
+    --glass-border: rgba(255, 255, 255, 0.6);
     --radius: 20px;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -22,74 +22,39 @@
 }
 
 body {
-    background-color: var(--bg-main);
-    color: var(--text-main);
     min-height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 30px 20px;
     position: relative;
-    overflow-x: hidden;
+    color: var(--text-dark);
+    /* Ảnh nền tĩnh trường học/thư viện đẹp mắt, không chuyển động */
+    background: url('https://images.unsplash.com/photo-1523050854058-8df90110c9f1?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
+    background-size: cover;
 }
 
-/* Background Animation Blobs (Đốm Xanh Lá & Xanh Lam Động) */
-.glow-bg {
+/* Lớp phủ mờ đệm giữa ảnh nền và nội dung */
+.static-bg-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100vw;
     height: 100vh;
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(249, 115, 22, 0.15));
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 0;
     pointer-events: none;
 }
 
-.blob {
-    position: absolute;
-    border-radius: 50%;
-    filter: blur(80px);
-    opacity: 0.55;
-    animation: float 12s infinite alternate ease-in-out;
-}
-
-.blob-1 {
-    width: 450px;
-    height: 450px;
-    background: #34d399;
-    top: -10%;
-    left: -10%;
-}
-
-.blob-2 {
-    width: 420px;
-    height: 420px;
-    background: #6ee7b7;
-    bottom: -10%;
-    right: -5%;
-    animation-delay: -4s;
-}
-
-.blob-3 {
-    width: 380px;
-    height: 380px;
-    background: #2dd4bf;
-    top: 35%;
-    left: 30%;
-    animation-delay: -8s;
-}
-
-@keyframes float {
-    0% { transform: translate(0, 0) scale(1); }
-    100% { transform: translate(60px, 40px) scale(1.15); }
-}
-
-/* Container */
 .app-container {
     width: 100%;
     max-width: 1200px;
     z-index: 1;
 }
 
+/* Header */
 .main-header {
     display: flex;
     justify-content: space-between;
@@ -106,24 +71,24 @@ body {
 .logo-icon {
     width: 50px;
     height: 50px;
-    background: linear-gradient(135deg, var(--primary), var(--accent-teal));
+    background: linear-gradient(135deg, var(--primary-green), var(--accent-orange));
     border-radius: 14px;
     display: flex;
     align-items: center;
     justify-content: center;
     font-size: 24px;
     color: #ffffff;
-    box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);
+    box-shadow: 0 10px 20px rgba(249, 115, 22, 0.25);
 }
 
 .logo-group h1 {
     font-size: 24px;
     font-weight: 800;
-    color: var(--text-main);
+    color: var(--text-dark);
 }
 
 .brand-accent {
-    background: linear-gradient(135deg, #10b981, #059669);
+    background: linear-gradient(135deg, var(--accent-orange), #dc2626);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
 }
@@ -131,13 +96,14 @@ body {
 .logo-group p {
     color: var(--text-muted);
     font-size: 13px;
+    font-weight: 500;
 }
 
 /* Nút Admin */
 .btn-admin {
-    background: rgba(255, 255, 255, 0.9);
+    background: rgba(255, 255, 255, 0.85);
     border: 1px solid var(--glass-border);
-    color: var(--text-main);
+    color: var(--text-dark);
     padding: 10px 18px;
     border-radius: 30px;
     font-size: 13px;
@@ -146,14 +112,14 @@ body {
     display: flex;
     align-items: center;
     gap: 8px;
-    box-shadow: 0 4px 12px rgba(16, 185, 129, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
     transition: var(--transition);
 }
 
 .btn-admin:hover {
-    background: var(--primary);
+    background: var(--accent-orange);
     color: #ffffff;
-    box-shadow: 0 8px 18px rgba(16, 185, 129, 0.3);
+    box-shadow: 0 8px 18px rgba(249, 115, 22, 0.35);
 }
 
 .btn-admin.logged-in {
@@ -184,7 +150,7 @@ body {
     grid-template-columns: 420px 1fr;
 }
 
-/* Glassmorphism Card Style */
+/* Thẻ Kính Trắng Mờ (Frosted Glass) */
 .card {
     background: var(--glass-card);
     backdrop-filter: blur(16px);
@@ -192,13 +158,13 @@ body {
     border: 1px solid var(--glass-border);
     border-radius: var(--radius);
     padding: 28px;
-    box-shadow: 0 15px 35px rgba(6, 78, 59, 0.08);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
 }
 
 .card-header h2 {
     font-size: 20px;
     font-weight: 800;
-    color: var(--text-main);
+    color: var(--text-dark);
     margin-bottom: 6px;
     display: flex;
     align-items: center;
@@ -206,7 +172,7 @@ body {
 }
 
 .card-header h2 i {
-    color: var(--primary);
+    color: var(--primary-green);
 }
 
 .card-header p {
@@ -215,7 +181,7 @@ body {
     margin-bottom: 22px;
 }
 
-/* Form inputs */
+/* Inputs */
 .input-group { margin-bottom: 18px; }
 .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
 
@@ -223,37 +189,39 @@ label {
     display: block;
     font-size: 13px;
     font-weight: 700;
-    color: var(--text-main);
+    color: var(--text-dark);
     margin-bottom: 8px;
 }
 
 label i {
-    color: var(--primary);
+    color: var(--accent-orange);
     margin-right: 5px;
 }
 
 input {
     width: 100%;
     padding: 13px 16px;
-    background: #ffffff;
-    border: 1px solid rgba(16, 185, 129, 0.25);
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(16, 185, 129, 0.3);
     border-radius: 12px;
-    color: var(--text-main);
+    color: var(--text-dark);
     font-size: 14px;
     outline: none;
     transition: var(--transition);
 }
 
 input:focus {
-    border-color: var(--primary);
-    box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+    border-color: var(--accent-orange);
+    box-shadow: 0 0 12px rgba(249, 115, 22, 0.25);
+    background: #ffffff;
 }
 
+/* Nút bấm Cam - Xanh kết hợp */
 .btn-primary {
     width: 100%;
     padding: 14px;
     margin-top: 10px;
-    background: linear-gradient(135deg, var(--primary), var(--primary-hover));
+    background: linear-gradient(135deg, var(--primary-green), var(--primary-green-hover));
     border: none;
     border-radius: 12px;
     color: white;
@@ -269,17 +237,18 @@ input:focus {
 }
 
 .btn-primary:hover {
+    background: linear-gradient(135deg, var(--accent-orange), var(--accent-orange-hover));
     transform: translateY(-2px);
-    box-shadow: 0 12px 25px rgba(16, 185, 129, 0.4);
+    box-shadow: 0 12px 25px rgba(249, 115, 22, 0.4);
 }
 
-/* Dashboard Table Section */
+/* Bảng danh sách Admin */
 .list-header { display: flex; justify-content: space-between; align-items: flex-start; }
 
 .btn-refresh {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.9);
     border: 1px solid var(--glass-border);
-    color: var(--primary);
+    color: var(--primary-green);
     width: 38px;
     height: 38px;
     border-radius: 10px;
@@ -288,14 +257,15 @@ input:focus {
 }
 
 .btn-refresh:hover {
-    background: var(--primary-light);
+    background: var(--accent-orange);
+    color: white;
     transform: rotate(90deg);
 }
 
 .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
 
 .stat-box {
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.85);
     border: 1px solid var(--glass-border);
     border-radius: 14px;
     padding: 15px;
@@ -306,13 +276,13 @@ input:focus {
 
 .stat-box i {
     font-size: 24px;
-    color: var(--primary);
+    color: var(--accent-orange);
 }
 
 .stat-number {
     font-size: 20px;
     font-weight: 800;
-    color: var(--text-main);
+    color: var(--text-dark);
 }
 
 .stat-label {
@@ -324,13 +294,12 @@ input:focus {
 .search-box i { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--text-muted); }
 .search-box input { padding-left: 42px; }
 
-/* Table Styling */
 .table-container {
     overflow-x: auto;
     max-height: 400px;
     border-radius: 12px;
     border: 1px solid var(--glass-border);
-    background: #ffffff;
+    background: rgba(255, 255, 255, 0.9);
 }
 
 .student-table {
@@ -341,9 +310,9 @@ input:focus {
 }
 
 .student-table th {
-    background: var(--primary-light);
+    background: #e6f4ea;
     padding: 14px 16px;
-    color: var(--text-main);
+    color: var(--text-dark);
     font-weight: 700;
     position: sticky;
     top: 0;
@@ -351,12 +320,12 @@ input:focus {
 
 .student-table td {
     padding: 14px 16px;
-    border-bottom: 1px solid rgba(16, 185, 129, 0.08);
-    color: var(--text-main);
+    border-bottom: 1px solid rgba(16, 185, 129, 0.1);
+    color: var(--text-dark);
 }
 
 .student-table tbody tr:hover {
-    background: var(--bg-main);
+    background: #f1f8f3;
 }
 
 .btn-delete {
