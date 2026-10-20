@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <!-- Background Animated Blobs (Chủ đề Xanh Lá & Trắng) -->
     <div class="glow-bg">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
@@ -27,12 +28,11 @@
                     <i class="fa-solid fa-graduation-cap"></i>
                 </div>
                 <div>
-                    <h1>EduPortal <span>Pro</span></h1>
-                    <p>Cổng Tiếp Nhận Thông Tin Sinh Viên</p>
+                    <h1>EduPortal <span class="brand-accent">Green</span></h1>
+                    <p>Cổng Tiếp Nhận Thông Tin Sinh Viên Cloud</p>
                 </div>
             </div>
             <div class="header-actions">
-                <!-- Nút Đăng nhập / Đăng xuất Admin -->
                 <button id="btnAdminLogin" class="btn-admin" onclick="toggleAdminAuth()">
                     <i class="fa-solid fa-user-shield"></i> <span id="adminBtnText">Đăng nhập Admin</span>
                 </button>
@@ -41,7 +41,7 @@
 
         <!-- Main Content Layout -->
         <main class="content-grid single-column" id="mainGrid">
-            <!-- Form Nhập Dữ Liệu (Ai cũng dùng được) -->
+            <!-- Form Nhập Dữ Liệu -->
             <section class="card form-card">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-user-plus"></i> Điền Thông Tin Sinh Viên</h2>
@@ -86,12 +86,12 @@
                 </form>
             </section>
 
-            <!-- Dashboard Admin (Khóa riêng tư - Bị ẩn mặc định) -->
+            <!-- Dashboard Admin (Riêng tư) -->
             <section class="card list-card admin-only" id="adminSection" style="display: none;">
                 <div class="card-header list-header">
                     <div>
                         <h2><i class="fa-solid fa-list-check"></i> Danh Sách Sinh Viên (Admin)</h2>
-                        <p>Khu vực quản trị riêng tư</p>
+                        <p>Khu vực quản trị thông tin cá nhân</p>
                     </div>
                     <button class="btn-refresh" onclick="loadStudents()" title="Tải lại dữ liệu">
                         <i class="fa-solid fa-rotate-right" id="refreshIcon"></i>

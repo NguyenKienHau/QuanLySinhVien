@@ -1,7 +1,7 @@
 const API_URL = 'https://quanlysinhvien-semm.onrender.com';
 
 // Mật khẩu Admin của bạn (Có thể đổi thành mật khẩu tùy thích)
-const ADMIN_PASSWORD = "123456";
+const ADMIN_PASSWORD = "15102006";
 
 let isAdmin = false;
 let allStudents = [];
