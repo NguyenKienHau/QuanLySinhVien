@@ -1,22 +1,19 @@
 <!DOCTYPE html>
 <html lang="vi">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hệ Thống Quản Lý Sinh Viên Cloud</title>
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap"
-        rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="style.css">
 </head>
-
 <body>
-    <!-- Nền Động (Animated Canvas Grid & Glowing Orbs) -->
+    <!-- Background Animated Grid & Orbs -->
     <div class="animated-bg">
         <div class="orb orb-green"></div>
         <div class="orb orb-orange"></div>
@@ -33,7 +30,7 @@
                 </div>
                 <div>
                     <h1>EduPortal <span class="brand-accent">Pro</span></h1>
-                    <p>Cổng Tiếp Nhận Thông Tin Sinh Viên Cloud</p>
+                    <p id="portalSubtitle">Cổng Tiếp Nhận Thông Tin Sinh Viên Cloud</p>
                 </div>
             </div>
             <div class="header-actions">
@@ -43,66 +40,73 @@
             </div>
         </header>
 
-        <!-- Main Content Layout -->
-        <main class="content-grid single-column" id="mainGrid">
-            <!-- Form Nhập Dữ Liệu -->
-            <section class="card form-card">
+        <!-- Main Content Area -->
+        <main class="content-area">
+            
+            <!-- 1. Giao diện Nhập Dữ Liệu cho KHÁCH (Sẽ ẨN khi Admin đăng nhập) -->
+            <section class="card form-card-public" id="guestFormSection">
                 <div class="card-header">
                     <h2><i class="fa-solid fa-user-plus"></i> Điền Thông Tin Sinh Viên</h2>
                     <p>Hệ thống tự động đồng bộ và lưu trữ dữ liệu an toàn lên Supabase Cloud</p>
                 </div>
 
-                <form id="studentForm" onsubmit="event.preventDefault(); addStudent();">
+                <form id="studentFormPublic" onsubmit="event.preventDefault(); addStudentPublic();">
                     <div class="input-group">
-                        <label for="hoTen"><i class="fa-regular fa-user"></i> Họ và Tên</label>
+                        <label for="hoTenPub"><i class="fa-regular fa-user"></i> Họ và Tên</label>
                         <div class="input-wrapper">
-                            <input type="text" id="hoTen" placeholder="Ví dụ: Nguyễn Văn A" required>
+                            <input type="text" id="hoTenPub" placeholder="Ví dụ: Nguyễn Văn A" required>
                         </div>
                     </div>
 
                     <div class="input-group">
-                        <label for="maSV"><i class="fa-solid fa-id-card"></i> Mã Sinh Viên</label>
+                        <label for="maSVPub"><i class="fa-solid fa-id-card"></i> Mã Sinh Viên</label>
                         <div class="input-wrapper">
-                            <input type="text" id="maSV" placeholder="Ví dụ: SV2026001" required>
+                            <input type="text" id="maSVPub" placeholder="Ví dụ: SV2026001" required>
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="input-group">
-                            <label for="lop"><i class="fa-solid fa-users-rectangle"></i> Lớp Học</label>
+                            <label for="lopPub"><i class="fa-solid fa-users-rectangle"></i> Lớp Học</label>
                             <div class="input-wrapper">
-                                <input type="text" id="lop" placeholder="DHKT16A" required>
+                                <input type="text" id="lopPub" placeholder="DHKT16A" required>
                             </div>
                         </div>
 
                         <div class="input-group">
-                            <label for="nganh"><i class="fa-solid fa-book-bookmark"></i> Ngành Học</label>
+                            <label for="nganhPub"><i class="fa-solid fa-book-bookmark"></i> Ngành Học</label>
                             <div class="input-wrapper">
-                                <input type="text" id="nganh" placeholder="CNTT / Marketing" required>
+                                <input type="text" id="nganhPub" placeholder="CNTT / Marketing" required>
                             </div>
                         </div>
                     </div>
 
-                    <button type="submit" id="btnSubmit" class="btn-primary">
+                    <button type="submit" id="btnSubmitPub" class="btn-primary">
                         <span class="btn-text">Lưu Dữ Liệu</span>
                         <i class="fa-solid fa-paper-plane btn-icon"></i>
                     </button>
                 </form>
             </section>
 
-            <!-- Dashboard Admin (Riêng tư) -->
-            <section class="card list-card admin-only" id="adminSection" style="display: none;">
+            <!-- 2. Giao diện Quản Lý ADMIN (Chỉ HIỆN khi đăng nhập Admin) -->
+            <section class="card list-card-admin" id="adminDashboardSection" style="display: none;">
                 <div class="card-header list-header">
                     <div>
-                        <h2><i class="fa-solid fa-list-check"></i> Danh Sách Sinh Viên (Admin)</h2>
-                        <p>Khu vực quản trị thông tin cá nhân</p>
+                        <h2><i class="fa-solid fa-list-check"></i> Quản Lý Danh Sách Sinh Viên</h2>
+                        <p>Bảng điều khiển quản trị viên</p>
                     </div>
-                    <button class="btn-refresh" onclick="loadStudents()" title="Tải lại dữ liệu">
-                        <i class="fa-solid fa-rotate-right" id="refreshIcon"></i>
-                    </button>
+                    <div class="header-btns">
+                        <!-- Nút Thêm Sinh Viên cho Admin -->
+                        <button class="btn-add-student" onclick="openStudentModal('add')">
+                            <i class="fa-solid fa-user-plus"></i> Thêm Sinh Viên
+                        </button>
+                        <button class="btn-refresh" onclick="loadStudents()" title="Tải lại dữ liệu">
+                            <i class="fa-solid fa-rotate-right" id="refreshIcon"></i>
+                        </button>
+                    </div>
                 </div>
 
-                <!-- Stats Counters -->
+                <!-- Thống kê nhanh -->
                 <div class="stats-grid">
                     <div class="stat-box">
                         <i class="fa-solid fa-user-graduate"></i>
@@ -120,14 +124,13 @@
                     </div>
                 </div>
 
-                <!-- Search Bar -->
+                <!-- Thanh Tìm Kiếm -->
                 <div class="search-box">
                     <i class="fa-solid fa-magnifying-glass"></i>
-                    <input type="text" id="searchInput" onkeyup="filterStudents()"
-                        placeholder="Tìm kiếm theo tên, Mã SV, Lớp...">
+                    <input type="text" id="searchInput" onkeyup="filterStudents()" placeholder="Tìm kiếm theo tên, Mã SV, Lớp, Ngành...">
                 </div>
 
-                <!-- Student Table -->
+                <!-- Bảng Danh Sách Sinh Viên -->
                 <div class="table-container">
                     <table class="student-table">
                         <thead>
@@ -136,21 +139,62 @@
                                 <th>Họ & Tên</th>
                                 <th>Lớp</th>
                                 <th>Ngành</th>
-                                <th>Thao tác</th>
+                                <th style="text-align: center;">Thao tác</th>
                             </tr>
                         </thead>
                         <tbody id="studentTableBody">
                             <tr>
-                                <td colspan="5" class="loading-state">Vui lòng đăng nhập Admin để xem...</td>
+                                <td colspan="5" class="loading-state">Đang tải danh sách dữ liệu...</td>
                             </tr>
                         </tbody>
                     </table>
                 </div>
             </section>
+
         </main>
     </div>
 
+    <!-- POPUP MODAL (Form Thêm / Sửa Sinh Viên Dành Cho Admin) -->
+    <div class="modal-overlay" id="studentModal" style="display: none;">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modalTitle"><i class="fa-solid fa-user-pen"></i> Chỉnh Sửa Sinh Viên</h3>
+                <button class="btn-close-modal" onclick="closeStudentModal()"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="modalForm" onsubmit="event.preventDefault(); saveStudentFromModal();">
+                <input type="hidden" id="modalEditOriginalMaSV">
+                
+                <div class="input-group">
+                    <label for="modalHoTen"><i class="fa-regular fa-user"></i> Họ và Tên</label>
+
+                    <input type="text" id="modalHoTen" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="modalMaSV"><i class="fa-solid fa-id-card"></i> Mã Sinh Viên</label>
+                    <input type="text" id="modalMaSV" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="input-group">
+                        <label for="modalLop"><i class="fa-solid fa-users-rectangle"></i> Lớp Học</label>
+                        <input type="text" id="modalLop" required>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="modalNganh"><i class="fa-solid fa-book-bookmark"></i> Ngành Học</label>
+                        <input type="text" id="modalNganh" required>
+                    </div>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="btn-cancel" onclick="closeStudentModal()">Hủy Bỏ</button>
+                    <button type="submit" id="btnModalSave" class="btn-save-modal">Lưu Thông Tin</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    
     <script src="script.js"></script>
 </body>
-
 </html>
