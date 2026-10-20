@@ -15,7 +15,7 @@ const pool = new Pool({
 // 1. API Lấy danh sách sinh viên
 app.get('/api/sinhvien', async (req, res) => {
     try {
-        const result = await pool.query('SELECT * FROM "SinhVien" ORDER BY "MaSV" ASC');
+        const result = await pool.query('SELECT * FROM "QuanLySinhVien" ORDER BY "MaSV" ASC');
         res.json(result.rows);
     } catch (err) {
         console.error("Loi GET:", err.message);
@@ -33,7 +33,7 @@ app.post('/api/sinhvien', async (req, res) => {
 
     try {
         const queryText = `
-            INSERT INTO "SinhVien" ("HoTen", "MaSV", "Lop", "Nganh") 
+            INSERT INTO "QuanLySinhVien" ("HoTen", "MaSV", "Lop", "Nganh") 
             VALUES ($1, $2, $3, $4)
         `;
         await pool.query(queryText, [HoTen.trim(), MaSV.trim(), Lop.trim(), Nganh.trim()]);
@@ -46,14 +46,14 @@ app.post('/api/sinhvien', async (req, res) => {
         }
         // Trả về thông báo lỗi chi tiết thay vì báo nhầm trùng mã
         res.status(500).json({ message: "Lỗi Database: " + (err.detail || err.message) });
-    }
+    }   
 });
 
 // 3. API Xóa sinh viên theo Mã SV
 app.delete('/api/sinhvien/:masv', async (req, res) => {
     const { masv } = req.params;
     try {
-        await pool.query('DELETE FROM "SinhVien" WHERE "MaSV" = $1', [masv]);
+        await pool.query('DELETE FROM "QuanLySinhVien" WHERE "MaSV" = $1', [masv]);
         res.json({ message: "Xóa sinh viên thành công!" });
     } catch (err) {
         console.error("Loi DELETE:", err.message);
