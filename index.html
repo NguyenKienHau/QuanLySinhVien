@@ -8,12 +8,11 @@
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- SweetAlert2 cho thông báo đẹp -->
+    <!-- SweetAlert2 -->
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <!-- Background Animated Blobs -->
     <div class="glow-bg">
         <div class="blob blob-1"></div>
         <div class="blob blob-2"></div>
@@ -29,21 +28,24 @@
                 </div>
                 <div>
                     <h1>EduPortal <span>Pro</span></h1>
-                    <p>Hệ thống Quản lý Sinh viên Đám mây</p>
+                    <p>Cổng Tiếp Nhận Thông Tin Sinh Viên</p>
                 </div>
             </div>
-            <div class="status-badge">
-                <span class="pulse-dot"></span> Supabase Connected
+            <div class="header-actions">
+                <!-- Nút Đăng nhập / Đăng xuất Admin -->
+                <button id="btnAdminLogin" class="btn-admin" onclick="toggleAdminAuth()">
+                    <i class="fa-solid fa-user-shield"></i> <span id="adminBtnText">Đăng nhập Admin</span>
+                </button>
             </div>
         </header>
 
         <!-- Main Content Layout -->
-        <main class="content-grid">
-            <!-- Left Side: Interactive Form -->
+        <main class="content-grid single-column" id="mainGrid">
+            <!-- Form Nhập Dữ Liệu (Ai cũng dùng được) -->
             <section class="card form-card">
                 <div class="card-header">
-                    <h2><i class="fa-solid fa-user-plus"></i> Tiếp Nhận Sinh Viên</h2>
-                    <p>Điền đầy đủ thông tin bên dưới để đồng bộ dữ liệu lên Cloud</p>
+                    <h2><i class="fa-solid fa-user-plus"></i> Điền Thông Tin Sinh Viên</h2>
+                    <p>Hệ thống tự động đồng bộ và lưu trữ dữ liệu an toàn lên Supabase Cloud</p>
                 </div>
 
                 <form id="studentForm" onsubmit="event.preventDefault(); addStudent();">
@@ -51,7 +53,6 @@
                         <label for="hoTen"><i class="fa-regular fa-user"></i> Họ và Tên</label>
                         <div class="input-wrapper">
                             <input type="text" id="hoTen" placeholder="Ví dụ: Nguyễn Văn A" required>
-                            <span class="focus-border"></span>
                         </div>
                     </div>
 
@@ -59,7 +60,6 @@
                         <label for="maSV"><i class="fa-solid fa-id-card"></i> Mã Sinh Viên</label>
                         <div class="input-wrapper">
                             <input type="text" id="maSV" placeholder="Ví dụ: SV2026001" required>
-                            <span class="focus-border"></span>
                         </div>
                     </div>
 
@@ -68,7 +68,6 @@
                             <label for="lop"><i class="fa-solid fa-users-rectangle"></i> Lớp Học</label>
                             <div class="input-wrapper">
                                 <input type="text" id="lop" placeholder="DHKT16A" required>
-                                <span class="focus-border"></span>
                             </div>
                         </div>
 
@@ -76,24 +75,23 @@
                             <label for="nganh"><i class="fa-solid fa-book-bookmark"></i> Ngành Học</label>
                             <div class="input-wrapper">
                                 <input type="text" id="nganh" placeholder="CNTT / Marketing" required>
-                                <span class="focus-border"></span>
                             </div>
                         </div>
                     </div>
 
                     <button type="submit" id="btnSubmit" class="btn-primary">
-                        <span class="btn-text">Lưu Dữ Liệu Cloud</span>
-                        <i class="fa-solid fa-cloud-arrow-up btn-icon"></i>
+                        <span class="btn-text">Lưu Dữ Liệu</span>
+                        <i class="fa-solid fa-paper-plane btn-icon"></i>
                     </button>
                 </form>
             </section>
 
-            <!-- Right Side: Dashboard & Student List -->
-            <section class="card list-card">
+            <!-- Dashboard Admin (Khóa riêng tư - Bị ẩn mặc định) -->
+            <section class="card list-card admin-only" id="adminSection" style="display: none;">
                 <div class="card-header list-header">
                     <div>
-                        <h2><i class="fa-solid fa-list-check"></i> Danh Sách Sinh Viên</h2>
-                        <p>Dữ liệu cập nhật thời gian thực từ Database</p>
+                        <h2><i class="fa-solid fa-list-check"></i> Danh Sách Sinh Viên (Admin)</h2>
+                        <p>Khu vực quản trị riêng tư</p>
                     </div>
                     <button class="btn-refresh" onclick="loadStudents()" title="Tải lại dữ liệu">
                         <i class="fa-solid fa-rotate-right" id="refreshIcon"></i>
@@ -138,9 +136,7 @@
                         </thead>
                         <tbody id="studentTableBody">
                             <tr>
-                                <td colspan="5" class="loading-state">
-                                    <i class="fa-solid fa-circle-notch fa-spin"></i> Đang tải dữ liệu từ Cloud...
-                                </td>
+                                <td colspan="5" class="loading-state">Vui lòng đăng nhập Admin để xem...</td>
                             </tr>
                         </tbody>
                     </table>
